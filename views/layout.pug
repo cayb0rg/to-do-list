@@ -1,0 +1,156 @@
+block head
+    head
+        meta(charset='utf-8')
+        title Stratagem
+        style
+            include ../public/style.css
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+
+body
+    header
+        h2#logo 
+            a(href='/') Stratagem
+        .user-info
+            a(href='/profile')#login-btn  Profile
+            a(href='/logout')#signup-btn Logout
+    .dashboard-layout
+        div.sidebar-nav
+            a(href='/dashboard/projects') All Projects
+            if (typeof(projects) !== 'undefined')
+                ul.projects-list
+                    each project in projects
+                        li
+                            .title
+                                a(href=project.url)= project.name
+            button#createProj Create New Project
+            .createProjForm.hideForm
+                p #{msg}
+                form(method='post' action='/dashboard/projects')
+                    input#name(type="text" name="name" placeholder="Project Name")
+                    input#submit(type="submit" value="Create")
+        if (layout == 'projects')
+            .center
+                div.project-header
+                    span Title
+                    span Number of Items
+                    span Date Created
+                div.project-list
+                    ul
+                        each project in projects
+                            li#project
+                                .title
+                                    a(href=project.url)= project.name
+                                .count
+                                    p=project.count
+                                .dateCreated
+                                    p= project.dateCreatedFormatted
+                            form(action="DELETE").hideForm
+                                input#submit(type="submit" value="SUBMIT")
+            div.details
+        if (layout == 'todoitems')
+            .center
+                div.item-header
+                    span Mark Complete
+                    span Description
+                    span Due
+                    span Created
+                div.list
+                    ul
+                        if (typeof(toDoItems) !== 'undefined')
+                            each item in toDoItems
+                                li.listItem
+                                    if (item.completed) 
+                                        .checkbox
+                                            form(method='post' action=item.url + '/update')
+                                                input(type='hidden' name='completed' value='false')#incompleteCheckbox
+                                                input(type='checkbox'
+                                                checked
+                                                onChange='this.form.submit()')#completeCheckbox
+                                        
+                                        .descriptionSmall.hideForm(onClick=`loadDetails('${item._id}')`)
+                                            p= item.description
+                                        .descriptionWide
+                                            a(href=item.url).descriptionLink.completed= item.description
+                                    else
+                                        .checkbox
+                                            form(method='post' action=item.url + '/update')
+                                                input(type='checkbox' name='completed' value='true'
+                                                onChange='this.form.submit()')#completeCheckbox
+                                        .descriptionSmall.hideForm(onClick=`loadDetails('${item._id}')`)
+                                            p= item.description
+                                        .descriptionWide
+                                            a(href=item.url).descriptionLink= item.description
+                                    .dueDate
+                                        p= item.dueDateFormatted
+                                    .dateCreated
+                                        p= item.dateCreatedFormatted
+                                .dropdownDetails.hideForm(id=item._id)
+                                    .details-content
+                                        h4= item.description
+                                        p= 'Project: ' + item.project.name
+                                        .due
+                                            p= 'Due Date: ' + item.dueDateFormatted
+                                        p= 'Date Created: ' + item.dateCreatedFormatted
+                                    button#editItem Edit
+                                    form(method='post' action=item.url + '/update').editItemForm.hideForm
+                                        p= item.dueDate
+                                        label(for='description') Description
+                                        textarea(name='description' id='description')= item.description
+                                        label(for='dueDate') Due Date
+                                        input(type="date" id='dueDate' name="dueDate" value=item.dueDateStandard)
+                                        input(type="submit" value="Edit")
+                                    form(method='post' action=item.url + '/delete')
+                                        input(type="submit" value="Delete")
+                        li.createForm
+                            button#createItem Create New Item
+                            form(method='post' action='/dashboard/projects/' + selected_project).createItemForm.hideForm
+                                label(for='completeCheckbox') Mark Completed
+                                input(type='checkbox' name='completed' id='completeCheckbox' value='true')
+                                textarea#name(placeholder="Description" name="description")
+                                input#dueDateFormatted(type="date" name="dueDate")
+                                input#submit(type="submit" value="Create")
+            div.details
+                if (typeof(selected_item) !== 'undefined')
+                    .details-content
+                        h4= selected_item.description
+                        p= 'Project: ' + selected_item.project.name
+                        .due
+                            p= 'Due Date: ' + selected_item.dueDateFormatted
+                        p= 'Date Created: ' + selected_item.dateCreatedFormatted
+                    button#editItem Edit
+                    form(method='post' action=selected_item.url + '/update').editItemForm
+                        p= selected_item.dueDate
+                        label(for='description') Description
+                        textarea(name='description' id='description')= selected_item.description
+                        label(for='dueDate') Due Date
+                        input(type="date" id='dueDate' name="dueDate" value=selected_item.dueDateStandard)
+                        input(type="submit" value="Edit")
+                    form(method='post' action=selected_item.url + '/delete')
+                        input(type="submit" value="Delete")
+
+script(src='/public/scripts/load-forms.js')
+script(src="/public/scripts/put_request.js")
+script.
+    window.addEventListener("resize", function() {
+        if (document.querySelector('body').clientWidth <= 1000) {
+            
+            document.querySelectorAll('.descriptionSmall').forEach((container) => {
+                container.classList.remove('hideForm');
+            })
+            document.querySelectorAll('.descriptionWide').forEach((container) => {
+                container.classList.add('hideForm');
+            })
+        } else {
+            document.querySelectorAll('.descriptionSmall').forEach((container) => {
+                container.classList.add('hideForm');
+            })
+            document.querySelectorAll('.descriptionWide').forEach((container) => {
+                container.classList.remove('hideForm');
+            })
+        }
+    });
+    
+    
+    function loadDetails(id) {
+        document.getElementById(id).classList.toggle('hideForm');
+    }

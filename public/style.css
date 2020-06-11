@@ -1,0 +1,258 @@
+:root {
+    --primary-color:  #000839;
+    --secondary-color: #005082;
+    --third-color: #00a8cc;
+    --pop-color: #ffa41b;
+    --neutral-color: white;
+    --font: "Poppins";
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: var(--font);
+}
+
+/** Homepage **/
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#logo *{
+    color: var(--primary-color);
+}
+
+#logo, .user-info {
+    padding: 24px;
+}
+
+#login-btn, #signup-btn {
+    color: var(--primary-color);
+    font-size: 1em;
+    padding: 0 0.5em;
+}
+
+#login-btn:hover, #signup-btn:hover, #logo *:hover {
+    color: var(--pop-color);
+}
+
+h1 {
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+/** Forms **/
+
+#error {
+    text-align: center;
+    color: rgb(255, 0, 0);
+}
+
+#success {
+    text-align: center;
+    color: rgb(0, 109, 0);
+}
+
+.signup, .login {
+    background-color: white;
+    padding: 1em;
+    max-width: 400px;
+    margin: auto;
+    border-radius: 5%;
+    margin-top: 25vh;
+}
+
+.signup *, .login * {
+    display: block;
+    width: 100%;
+}
+
+form * {
+    padding: 1em 0;
+    margin: 1em 0;
+}
+
+form input, form textarea {
+    padding: 1em;
+}
+
+.submit {
+    border: none;
+    background-color: var(--pop-color);
+    font-size: 1em;
+}
+
+.submit:hover {
+    background-color: rgb(255, 180, 82);
+    cursor: pointer;
+}
+
+button {
+    width: 100%;
+}
+
+/* Dashboard */
+
+
+
+.dashboard-layout {
+    display: grid;
+    grid-template-areas: 
+                "nav list details";
+    grid-template-columns: minmax(0, 1fr) 2fr minmax(0, 1fr);
+    margin: 0 3em;
+    grid-column-gap: 1em;
+}
+
+.sidebar-nav {
+    grid-area: nav;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-width: 90px;
+}
+
+.hideForm {
+    display: none !important;
+}
+
+.center {
+    grid-area: list;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+.item-header {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr;
+    border-bottom: 1px solid rgb(204, 204, 204);
+    margin-bottom: 5px;
+}
+
+.item-header span:nth-child(1), 
+.list li div:nth-child(1),
+.project-header span:nth-child(1),
+.project-list li div:nth-child(1) {
+    min-width: 85px;
+}
+
+.item-header span:nth-child(2), 
+.list li div:nth-child(2),
+.project-header span:nth-child(2),
+.project-list li div:nth-child(2) {
+    min-width: 95px;
+}
+
+.item-header span:nth-child(3), 
+.item-header span:nth-child(4), 
+.list li div:nth-child(3), 
+.list li div:nth-child(4) {
+    min-width: 90px;
+}
+
+.item-header span:nth-child(-n+3), 
+.list li div:not(:last-child), 
+.project-header span:nth-child(-n+2), 
+.project-list li div:nth-child(-n+2) {
+    border-right: 1px solid rgb(204, 204, 204);
+}
+
+.item-header span:nth-child(n+2), .list li div:nth-child(n+2) {
+    padding-left: 5px;
+}
+
+.project-header span:nth-child(n+2), .project-list li div:nth-child(n+2) {
+    padding: 0 5px;
+}
+
+.project-list {
+    display: grid;
+}
+
+.project-list li {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    margin: 1em 0;
+}
+
+.list {
+    display: grid;
+}
+
+.list li {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr;
+    margin: 1em 0;
+}
+
+.list li a {
+    color: var(--primary-color);
+}
+
+.list li:not(.createForm):hover {
+    background-color: lightgray;
+}
+
+.createForm {
+    display: block !important;
+}
+
+#createItem:hover {
+    cursor: pointer;
+}
+
+.completed {
+    text-decoration: line-through;
+}
+
+.details {
+    grid-area: details;
+}
+
+.list li div {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+form * {
+    width: 100%;
+}
+
+.createItemForm *:nth-child(2) {
+    text-align: left;
+    margin-left: 1em;
+    width: 0;
+}
+
+.descriptionSmall:hover {
+    cursor: pointer;
+}
+
+@media (max-width: 1000px) {
+    .dashboard-layout {
+        grid-template-areas: 
+                "nav list";
+        grid-template-columns:minmax(0, 1fr) 2fr;
+    }
+
+    .details {
+        display: none;
+    }
+}

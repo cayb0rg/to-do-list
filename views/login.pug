@@ -1,0 +1,22 @@
+head
+    meta(charset='utf-8')
+    title Stratagem
+    link(rel='stylesheet' href='../public/style.css' type='text/css')
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet"> 
+
+body
+    header
+        h2#logo 
+            a(href='/') Stratagem
+        .user-info
+            a(href='/login')#login-btn  Login
+            a(href='/signup')#signup-btn Sign Up
+    .login
+        h1 Log In
+        p#success.msg #{success_msg}
+        p#error.msg #{error_msg}
+        p#error.msg #{error}
+        form(method='post' action='/login')
+            input(type='text' placeholder='Username' name='username')
+            input(type='password' name='password' placeholder='Password')
+            input(type='submit' value='Log In').submit
