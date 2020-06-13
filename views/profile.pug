@@ -1,0 +1,25 @@
+head
+    meta(charset='utf-8')
+    title Stratagem
+    link(rel='stylesheet' href='../public/style.css' type='text/css')
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet"> 
+
+body
+    header
+        h2#logo 
+            a(href='/') Stratagem
+        .user-info
+            a#profile-btn(onClick='loadDropdown()') Profile
+            .profileDropdown.hideForm
+                a(href='/dashboard')#dashboard-btn Dashboard
+            a(href='/logout')#signup-btn Logout
+    .profile-content
+        .logout-btn
+            a(href='/logout') Logout
+        .delete-account
+            a(href='/user/delete' onClick='return confirm("This action is permanent. Delete account?")') Delete Account
+
+script.
+    function delete() {
+        var result = confirm("This action is permanent. Delete account?")
+    }

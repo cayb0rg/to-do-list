@@ -22,18 +22,16 @@ itemCreateBtn.addEventListener('click', () => {
     }
 })
 
-const editItemBtn = document.getElementById('editItem');
-const editItemForm = document.querySelector('.editItemForm');
+const editItemBtn2 = document.getElementById('editItem2');
+const editItemForm2 = document.querySelector('.editItemForm2');
 const details = document.querySelector('.details-content');
 
-document.getElementById('description').value=document.getElementById('description').value;
-
-editItemBtn.addEventListener('click', () => {
-    editItemForm.classList.toggle('hideForm');
+editItemBtn2.addEventListener('click', () => {
+    editItemForm2.classList.toggle('hideForm');
     details.classList.toggle('hideForm');
-    if(editItemForm.classList.contains('hideForm')) {
-        editItemBtn.innerText = 'Edit';
+    if(editItemForm2.classList.contains('hideForm')) {
+        editItemBtn2.innerText = 'Edit';
     } else {
-        editItemBtn.innerText = 'Cancel';
+        editItemBtn2.innerText = 'Cancel';
     }
 })

@@ -4,11 +4,13 @@ const moment = require('moment');
 
 
 var ToDoItemSchema = new Schema({
+    title: String,
     description: String,
     dueDate: Date,
     priority: Number,
     dateCreated: Date,
     completed: Boolean,
+    dateCompleted: Date,
     project: {type: Schema.Types.ObjectId, ref: 'Project'}
 })
 
@@ -29,6 +31,10 @@ ToDoItemSchema.virtual('dueDateStandard').get(function() {
 
 ToDoItemSchema.virtual('dateCreatedFormatted').get( function() {
     return moment(this.dateCreated).fromNow();
+})
+
+ToDoItemSchema.virtual('dateCompletedFormatted').get( function() {
+    return moment(this.dateCompleted).fromNow();
 })
 
 var ToDoItem = mongoose.model('ToDoItem', ToDoItemSchema);

@@ -16,10 +16,14 @@ router.get('/projects', project_controller.index)
 router.post('/projects', project_controller.project_create, project_controller.index);
 
 // Update project details
-router.post('/projects/:projectId/update', project_controller.project_update); 
+router.post('/projects/:projectId/update', project_controller.project_update, (req, res) => {
+    res.redirect('/dashboard/projects/')
+}); 
 
 // Delete project
-router.delete('/projects/:projectId', project_controller.project_delete); 
+router.post('/projects/:projectId/delete', project_controller.project_delete, (req, res) => {
+    res.redirect('/dashboard/projects/')
+}); 
 
 // Item routes
 

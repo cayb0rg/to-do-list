@@ -49,7 +49,10 @@ var authRoutes = require('./routes/authRoutes.js');
 var {ensureAuthenticated} = require('./config/auth');
 
 app.get('/', (req, res, next) => {
-    res.render('homepage');
+    if (req.isAuthenticated())
+        res.render('homepage', {loggedIn: true});
+    else
+        res.render('homepage', {loggedIn: false})
 })
 app.use('/dashboard', ensureAuthenticated, dashboard);
 app.use('/', authRoutes);
