@@ -5,6 +5,7 @@ var ToDoItem = require('./ToDoItem')
 
 var ProjectSchema = new Schema({
     name: String,
+    dateCreated: Date,
     toDoItems: [{type: Schema.Types.ObjectId, ref: 'ToDoItem'}],
     user: {type: Schema.Types.ObjectId, ref: 'User'}
 })

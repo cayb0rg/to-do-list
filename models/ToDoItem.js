@@ -22,11 +22,17 @@ ToDoItemSchema.virtual('url').get(function() {
 })
 
 ToDoItemSchema.virtual('dueDateFormatted').get(function() {
-    return moment(this.dueDate).fromNow();
+    if (this.dueDate)
+        return moment(this.dueDate).fromNow();
+    else
+        return 'Never';
 })
 
 ToDoItemSchema.virtual('dueDateStandard').get(function() {
-    return moment(this.dueDate).utc().format('YYYY-MM-DD');
+    if (this.dueDate)
+        return moment(this.dueDate).utc().format('YYYY-MM-DD');
+    else
+        return 'Never';
 })
 
 ToDoItemSchema.virtual('dateCreatedFormatted').get( function() {
@@ -35,6 +41,13 @@ ToDoItemSchema.virtual('dateCreatedFormatted').get( function() {
 
 ToDoItemSchema.virtual('dateCompletedFormatted').get( function() {
     return moment(this.dateCompleted).fromNow();
+})
+
+ToDoItemSchema.virtual('overDue').get(function() {
+    if (this.dueDate)
+        return this.dueDate < new Date();
+    else
+        return false;
 })
 
 var ToDoItem = mongoose.model('ToDoItem', ToDoItemSchema);

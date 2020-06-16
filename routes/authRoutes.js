@@ -4,6 +4,8 @@ var passport = require('passport');
 var bcrypt = require('bcrypt');
 
 var User = require('../models/User.js');
+var Project = require('../models/Project.js')
+var ToDoItem = require('../models/ToDoItem.js')
 
 router.get('/', (req, res) => {
     res.render('homepage');
@@ -43,6 +45,9 @@ router.post('/signup', function(req, res) {
                     username,
                     password,
                 })
+
+                
+
                 // Hash password
                 bcrypt.genSalt(10, (err, salt) => bcrypt.hash(user.password, salt, (err, hash) => {
                     if (err) throw err;
@@ -51,6 +56,23 @@ router.post('/signup', function(req, res) {
                     // Save user
                     user.save()
                         .then(user => {
+                            // Create default project with to do
+                            let defaultProject = new Project({
+                                name: "Default Project",
+                                user: user.id
+                            })
+                            defaultProject.save().then( proj => {
+                                let defaultToDo = new ToDoItem({
+                                    title: "Create your first to-do",
+                                    description: "Let's create your first to-do! Go ahead and click the 'New To-Do' below.",
+                                    dateCreated: new Date(),
+                                    completed: false,
+                                    project: proj._id
+                                })
+                                defaultToDo.save()
+                            })
+
+                            // Redirect
                             req.flash('success_msg', 'You are now registered');
                             res.redirect('/login');
                         })

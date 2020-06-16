@@ -22,6 +22,7 @@ exports.index = function(req, res) {
         }
     }, function(err, results) {
         res.render('layout', {
+            loggedIn: true,
             layout: 'todoitems', 
             projects: results.projects, 
             toDoItems: results.items,
@@ -47,6 +48,7 @@ exports.item_get = function(req, res) {
         }
     }, function(err, results) {
         res.render('layout', {
+            loggedIn: true,
             layout: 'todoitems', 
             projects: results.projects, 
             toDoItems: results.items,

@@ -4,12 +4,18 @@ var async = require('async')
 
 // List projects
 exports.index = function(req, res) {
+    // Sort
+    const sort = {}
+    if (req.query.sortBy && req.query.orderBy) {
+        sort[req.query.sortBy] = req.query.orderBy === 'desc' ? -1 : 1;
+    }
+    
     Project.find({user: req.user.id}, function(err, projects) {
         res.render('layout', {
             projects: projects, 
             layout: 'projects'
         })
-    }).populate('toDoItems')
+    }).sort(sort).populate('toDoItems')
 }
 
 // Handle project create
@@ -17,6 +23,7 @@ exports.project_create = async function(req, res, next) {
     let project = new Project({
         name: req.body.name,
         user: req.user.id,
+        dateCreated: new Date(),
     })
 
     await project.save((err) => {

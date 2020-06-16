@@ -5,19 +5,7 @@ head
     style
         include ../public/style.css
 body.home-page
-    header
-        h2#logo 
-            a(href='/') Stratagem
-        .user-info()
-            if (loggedIn == true)
-                .profile
-                    a#profile-btn Profile
-                    .profileDropdown
-                        a(href='/dashboard')#dashboard-btn Dashboard
-                    a(href='/logout')#signup-btn Logout
-            else
-                a(href='/login')#login-btn  Login
-                a(href='/signup')#signup-btn Sign Up
+    include header      
 
 script.
     var profileDrop = document.querySelector('.profileDropdown');

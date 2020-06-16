@@ -13,16 +13,46 @@
     font-family: var(--font);
 }
 
-/** Homepage **/
+h1 {
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    cursor: pointer;
+    color: var(--pop-color);
+}
+
+li {
+    list-style: none;
+}
+
+button {
+    width: 100%;
+}
+
+.hide {
+    display: none !important;
+}
+
+form * {
+    width: 100%;
+}
+
+button:hover, .pointer:hover {
+    cursor: pointer;
+}
+
+/** Header **/
 header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
-}
-
-#logo *{
-    color: var(--primary-color);
 }
 
 #logo, .user-info {
@@ -94,23 +124,10 @@ header {
     border-color: transparent transparent black transparent;
 }
 
-h1 {
-    text-align: center;
-}
+/** Homepage **/
 
-a {
-    text-decoration: none;
-    color: black;
-}
 
-a:hover {
-    cursor: pointer;
-}
-
-li {
-    list-style: none;
-}
-/** Forms **/
+/** Signup & Login **/
 
 #error {
     text-align: center;
@@ -145,24 +162,7 @@ form input, form textarea {
     padding: 1em;
 }
 
-.submit {
-    border: none;
-    background-color: var(--pop-color);
-    font-size: 1em;
-}
-
-.submit:hover {
-    background-color: rgb(255, 180, 82);
-    cursor: pointer;
-}
-
-button {
-    width: 100%;
-}
-
 /* Dashboard */
-
-
 
 .dashboard-layout {
     display: grid;
@@ -173,6 +173,20 @@ button {
     grid-column-gap: 1em;
 }
 
+@media (max-width: 1000px) {
+    .dashboard-layout {
+        grid-template-areas: 
+                "nav list";
+        grid-template-columns:minmax(0, 1fr) 2fr;
+    }
+
+    .details {
+        display: none;
+    }
+}
+
+/* Sidebar */
+
 .sidebar-nav {
     grid-area: nav;
     display: flex;
@@ -181,65 +195,26 @@ button {
     min-width: 90px;
 }
 
-.hideForm {
-    display: none !important;
+.sidebar-nav li{
+    padding: 10px 0;
+    border-bottom: 1px solid rgb(204, 204, 204);
 }
 
-.center {
+/* Table */
+
+.table {
     grid-area: list;
     display: flex;
     flex-direction: column;
 }
 
+/* Project-specific */
+
 .project-header {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 0.5fr;
     border-bottom: 1px solid rgb(204, 204, 204);
-}
-
-.item-header {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr 1fr;
-    border-bottom: 1px solid rgb(204, 204, 204);
     margin-bottom: 5px;
-}
-
-.item-header > div:nth-child(1), 
-.list li div:nth-child(1),
-.project-header span:nth-child(1),
-.project-list li div:nth-child(1) {
-    min-width: 85px;
-}
-
-.item-header > div:nth-child(2), 
-.list li div:nth-child(2),
-.project-header span:nth-child(2),
-.project-list li div:nth-child(2) {
-    min-width: 125px;
-}
-
-.item-header > div:nth-child(3), 
-.item-header > div:nth-child(4), 
-.list li div:nth-child(3), 
-.list li div:nth-child(4), 
-.list li div:nth-child(5) {
-    min-width: 90px;
-}
-
-.item-header > div:nth-child(-n+3), 
-.list li > div:not(:last-child), 
-.project-header span:nth-child(-n+2), 
-.project-list li div:nth-child(-n+2) {
-    border-right: 1px solid rgb(204, 204, 204);
-}
-
-.project-header span:nth-child(4),
-.project-list li div:nth-child(4) {
-    min-width: 60px;
-}
-
-.item-header > div:nth-child(n+2), .list li > div:nth-child(n+2) {
-    padding-left: 5px;
 }
 
 .project-header span:nth-child(n+2), .project-list li div:nth-child(n+2) {
@@ -257,92 +232,10 @@ button {
     margin: 1em 0;
 }
 
-.projects-list li{
-    padding: 10px 0;
-    border-bottom: 1px solid rgb(204, 204, 204);
-}
-
-a:hover{
-    color: var(--pop-color);
-}
-
-#project li div {
-
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-}
-
-.list {
-    display: grid;
-}
-
-.list li {
-    list-style: none;
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr 1fr;
-    margin: 1em 0;
-}
-
-.list li a {
-    color: var(--primary-color);
-}
-
-.list li:not(.createForm):hover {
-    background-color: lightgray;
-}
-
-.createForm {
-    display: block !important;
-}
-
-#createItem:hover {
-    cursor: pointer;
-}
-
-.completed {
-    text-decoration: line-through;
-}
-
-.details {
-    grid-area: details;
-}
-
-.list li div {
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-}
-
-form * {
-    width: 100%;
-}
-
-.createItemForm *:nth-child(2) {
-    text-align: left;
-    margin-left: 1em;
-    width: 0;
-}
-
-.titleSmall:hover {
-    cursor: pointer;
-}
-
 .projDel {
     position: absolute;
-    width: 60px;
-}
-
-#delBtn {
-    background-color: rgb(0, 0, 0);
-    border-radius: 5px;
-    border: 1px solid black;
-    padding: 1em 0;
-    color: rgb(255, 255, 255);
-}
-
-#delBtn:hover {
-    background-color: rgb(133, 0, 0);
+    top: 30px;
+    min-width: 60px;
 }
 
 .projDel::after {
@@ -355,30 +248,22 @@ form * {
     border-color: transparent transparent black transparent;
 }
 
+.options {
+    max-height: 50px;
+    position: relative;
+}
+
 #optionsBtn:hover * {
     fill: rgb(204, 204, 204);
 }
 
-.posBtn {
-    background-color: black;
-    color: white;
-    border-radius: 5px;
-    border: none;
-    padding: 1em 0;
-}
+/* To Do Specific */
 
-.posBtn:hover {
-    background-color: var(--pop-color)
-}
-
-button:hover, .btn:hover {
-    cursor: pointer;
-}
-
-.item-header > div {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+.item-header {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr;
+    border-bottom: 1px solid rgb(204, 204, 204);
+    margin-bottom: 5px;
 }
 
 .item-header > div > * {
@@ -398,6 +283,37 @@ button:hover, .btn:hover {
     background-color: rgb(204, 204, 204);
 }
 
+.titleSmall:hover {
+    cursor: pointer;
+}
+
+.overDue {
+    color: rgb(255, 0, 0);
+}
+
+.toDoList {
+    display: grid;
+}
+
+.toDoList li {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr;
+    margin: 1em 0;
+}
+
+.toDoList li a {
+    color: var(--primary-color);
+}
+
+.toDoList li:not(.createItemSection):hover {
+    background-color: lightgray;
+}
+
+.completed {
+    text-decoration: line-through;
+}
+
 .dropdownDetails {
     border: 2px solid black;
     border-radius: 10px;
@@ -414,14 +330,125 @@ button:hover, .btn:hover {
     border-color: transparent transparent black transparent;
 }
 
-@media (max-width: 1000px) {
-    .dashboard-layout {
-        grid-template-areas: 
-                "nav list";
-        grid-template-columns:minmax(0, 1fr) 2fr;
-    }
-
-    .details {
-        display: none;
-    }
+#completeCheckbox {
+    display: inline-block;
 }
+
+.details-content > * {
+    padding-bottom: 10px;
+}
+
+.createItemSection {
+    display: block !important;
+}
+
+.createItemForm *:nth-child(2) {
+    text-align: left;
+    margin-left: 1em;
+    width: 0;
+}
+
+#createItem:hover {
+    cursor: pointer;
+}
+
+/* Table formatting */
+
+.item-header > div:nth-child(1), 
+.toDoList li div:nth-child(1),
+.project-header span:nth-child(1),
+.project-list li div:nth-child(1) {
+    min-width: 85px;
+}
+
+.item-header > div:nth-child(2), 
+.toDoList li > *:nth-child(2),
+.project-header span:nth-child(2),
+.project-list li div:nth-child(2) {
+    min-width: 125px;
+}
+
+.item-header > div:nth-child(3), 
+.item-header > div:nth-child(4), 
+.toDoList li div:nth-child(3), 
+.toDoList li div:nth-child(4), 
+.toDoList li div:nth-child(5) {
+    min-width: 90px;
+}
+
+.item-header > div:nth-child(-n+3), 
+.toDoList li > *:not(:last-child), 
+.project-header span:nth-child(-n+2), 
+.project-list li div:nth-child(-n+2) {
+    border-right: 1px solid rgb(204, 204, 204);
+}
+
+.project-header span:nth-child(4),
+.project-list li div:nth-child(4) {
+    min-width: 60px;
+}
+
+.item-header > div:nth-child(n+2), .toDoList li > *:nth-child(n+2) {
+    padding-left: 5px;
+}
+
+.toDoList li > *, .project-list li div {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+.item-header > div, .project-header > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+
+/* Details Section */
+
+.details {
+    grid-area: details;
+}
+
+
+
+/* Types of Buttons */
+
+.delBtn {
+    background-color: rgb(0, 0, 0);
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 1em 0;
+    color: rgb(255, 255, 255);
+}
+
+.delBtn:hover {
+    background-color: rgb(133, 0, 0);
+}
+
+.neutralBtn {
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    padding: 1em 0;
+}
+
+.posBtn {
+    background-color: var(--pop-color);
+    color: white;
+    border-radius: 5px;
+    border: none;
+    padding: 1em 0;
+}
+
+.posBtn:hover {
+    background-color: rgb(255, 180, 82);
+}
+
+.neutralBtn:hover {
+    background-color: var(--pop-color)
+}
+
+
