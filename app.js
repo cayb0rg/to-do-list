@@ -1,12 +1,14 @@
-var express = require('express');
-var bodyparser = require('body-parser');
-var path = require('path');
-var session = require('express-session');
-var passport = require('passport');
-var flash = require('connect-flash-plus');
-var mongoose = require('mongoose').set('debug', true);
+/* eslint-disable indent */
+/* eslint-disable linebreak-style */
+const express = require('express');
+const bodyparser = require('body-parser');
+const path = require('path');
+const session = require('express-session');
+const passport = require('passport');
+const flash = require('connect-flash-plus');
+const mongoose = require('mongoose').set('debug', true);
 
-var app = express();
+const app = express();
 
 // Passport config
 require('./config/passport')(passport);
@@ -16,20 +18,19 @@ app.use(bodyparser.urlencoded({extended: true}));
 app.use(bodyparser.json());
 
 // Pug
-var pug = require('pug');
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, './views'));
 
 // Public
-app.use('/public', express.static(path.join(__dirname, 'public')))
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Express session
 app.use(session({
     secret: 'keyboard cat',
     resave: true,
     saveUninitialized: true,
-    cookie: { secure: false }
-}))
+    cookie: { secure: false },
+}));
 
 // Passport middleware
 app.use(passport.initialize());
@@ -39,24 +40,24 @@ app.use(passport.session());
 app.use(flash());
 
 // MongoDB Set-Up
-mongoose.connect('mongodb://localhost/ToDoListAPI', {useNewUrlParser: true, useUnifiedTopology: true})
-var db = mongoose.connection;
+mongoose.connect('mongodb://localhost/ToDoListAPI', {useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error'));
 
 // Routes
-var dashboard = require('./routes/dashboard.js');
-var authRoutes = require('./routes/authRoutes.js');
-var {ensureAuthenticated} = require('./config/auth');
+const dashboard = require('./routes/dashboard.js');
+const authRoutes = require('./routes/authRoutes.js');
+const { ensureAuthenticated } = require('./config/auth');
 
-app.get('/', (req, res, next) => {
+app.get('/', (req, res) => {
     if (req.isAuthenticated())
         res.render('homepage', {loggedIn: true});
     else
-        res.render('homepage', {loggedIn: false})
-})
+        res.render('homepage', {loggedIn: false});
+});
 app.use('/dashboard', ensureAuthenticated, dashboard);
 app.use('/', authRoutes);
 
-var port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 app.listen(port);

@@ -47,6 +47,7 @@ button:hover, .pointer:hover {
     cursor: pointer;
 }
 
+
 /** Header **/
 header {
     display: flex;
@@ -72,7 +73,7 @@ header {
     color: var(--pop-color);
 }
 
-.profileDropdown {
+#profileDropdown {
     position: absolute;
     background-color: black;
     top: 130%;
@@ -92,7 +93,7 @@ header {
     position: relative;
 }
 
-#profile-btn:hover + .profileDropdown, .profileDropdown:hover{
+#profile-btn:hover + #profileDropdown, #profileDropdown:hover{
     cursor: pointer;
     display: block;
 }
@@ -101,11 +102,11 @@ header {
     color: white;
 }
 
-.profileDropdown:hover{
+#profileDropdown:hover{
     background-color: rgb(56, 56, 56);
 }
 
-.profileDropdown::before {
+#profileDropdown::before {
     content: "";
     position: absolute;
     bottom: 100%;
@@ -114,7 +115,7 @@ header {
     height: 10px;
 }
 
-.profileDropdown::after {
+#profileDropdown::after {
     content: "";
     position: absolute;
     bottom: 100%;
@@ -197,6 +198,9 @@ form input, form textarea {
 
 .sidebar-nav li{
     padding: 10px 0;
+}
+
+.sidebar-nav li:not(:last-child) {
     border-bottom: 1px solid rgb(204, 204, 204);
 }
 
@@ -342,7 +346,7 @@ form input, form textarea {
     display: block !important;
 }
 
-.createItemForm *:nth-child(2) {
+#createItemForm *:nth-child(2) {
     text-align: left;
     margin-left: 1em;
     width: 0;
@@ -376,8 +380,8 @@ form input, form textarea {
     min-width: 90px;
 }
 
-.item-header > div:nth-child(-n+3), 
-.toDoList li > *:not(:last-child), 
+.item-header > div:nth-child(-n+3),
+.toDoList li:not(.createItemSection) > *, 
 .project-header span:nth-child(-n+2), 
 .project-list li div:nth-child(-n+2) {
     border-right: 1px solid rgb(204, 204, 204);
@@ -418,7 +422,7 @@ form input, form textarea {
 .delBtn {
     background-color: rgb(0, 0, 0);
     border-radius: 5px;
-    border: 1px solid black;
+    border: none;
     padding: 1em 0;
     color: rgb(255, 255, 255);
 }

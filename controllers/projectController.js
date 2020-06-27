@@ -12,6 +12,7 @@ exports.index = function(req, res) {
     
     Project.find({user: req.user.id}, function(err, projects) {
         res.render('layout', {
+            loggedIn: true,
             projects: projects, 
             layout: 'projects'
         })
@@ -47,9 +48,23 @@ exports.project_update = function(req, res) {
 }
 
 // Delete project
-exports.project_delete = function(req, res, next) {
-    Project.deleteOne({_id: req.params.projectId}, (err) => {
-        if (err) return res.send(err);
+exports.project_delete = async function(req, res, next) {
+    async.parallel([
+        function(callback) {
+            Project.deleteOne({_id: req.params.projectId}, (err) => {
+                if (err) return res.send(err);
+                callback();
+            })
+        },
+        function(callback) {
+            ToDoItem.deleteMany({project: req.params.projectId}, (err) => {
+                if (err) return res.send(err);
+                callback();
+            })
+        },
+    ], function(err) {
+        next();
     })
-    next();
+    
+
 }

@@ -11,7 +11,8 @@ var ToDoItemSchema = new Schema({
     dateCreated: Date,
     completed: Boolean,
     dateCompleted: Date,
-    project: {type: Schema.Types.ObjectId, ref: 'Project'}
+    project: {type: Schema.Types.ObjectId, ref: 'Project'},
+    user: {type: Schema.Types.ObjectId, ref: 'User'}
 })
 
 ToDoItemSchema.set('toObject', { virtuals: true })

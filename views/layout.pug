@@ -4,7 +4,7 @@ block head
         title Dashboard | Stratagem
         style
             include ../public/style.css
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap' rel='stylesheet'>
 
 body
     include header
@@ -18,11 +18,11 @@ body
                     each project in projects
                         li
                             a(href=project.url)= project.name
-            button#createProj.neutralBtn(onClick='loadCreateProjectForm()') Create New Project
-            .createProjForm.hide
+            button#createProjBtn.neutralBtn(onClick=`loadForm('createProjForm', 'createProjBtn', 'Create New Project')`) Create New Project
+            #createProjForm.hide
                 form(method='post' action='/dashboard/projects')
-                    input(type="text" name="name" placeholder="Project Name")
-                    input(type="submit" value="Create").posBtn.pointer
+                    input(type='text' name='name' placeholder='Project Name')
+                    input(type='submit' value='Create').posBtn.pointer
         if (layout == 'projects')
             .table
                 div.project-header
@@ -49,12 +49,12 @@ body
                                 .dateCreated
                                     p= project.dateCreatedFormatted
                                 .options
-                                    svg#optionsBtn(viewbox='0 0 8 4' onClick=`toggleOptions('${project._id}')`)
+                                    svg#optionsBtn(viewbox='0 0 8 4' onmouseover=`loadDropdown('${project._id}')` onmouseout=`removeDropdown('${project._id}')`)
                                         ellipse(cx='2' cy='2' rx='0.5' ry='0.5')
                                         ellipse(cx='4' cy='2' rx='0.5' ry='0.5')
                                         ellipse(cx='6' cy='2' rx='0.5' ry='0.5')
-                                    form.projDel(action=project.url + '/delete' method='post' id=project._id).hide
-                                        input.delBtn.pointer(type="submit" value="Delete")
+                                    form.projDel(action=project.url + '/delete' method='post' id=project._id onmouseover=`loadDropdown('${project._id}')` onmouseout=`removeDropdown('${project._id}')`).hide
+                                        input.delBtn.pointer(type='submit' value='Delete')
                             
             div.details
         if (layout == 'todoitems')
@@ -108,18 +108,18 @@ body
                                                 input(type='checkbox'
                                                 checked
                                                 onChange='this.form.submit()')#completeCheckbox
-                                        .titleSmall(onClick=`loadDetails('${item._id}')`)
+                                        .titleSmall.itemTitle(onClick=`loadDetails('${item._id}')`)
                                             p.completed= item.title
-                                        a(href=item.url).titleWide.hide
+                                        a(href=item.url).titleWide.itemTitle.hide
                                             p= item.title
                                     else
                                         .checkbox
                                             form(method='post' action=item.url + '/update')
                                                 input(type='checkbox' name='completed' value='true'
                                                 onChange='this.form.submit()')#completeCheckbox
-                                        .titleSmall(onClick=`loadDetails('${item._id}')`)
+                                        .titleSmall.itemTitle(onClick=`loadDetails('${item._id}')`)
                                             p= item.title
-                                        a(href=item.url).titleWide.hide
+                                        a(href=item.url).titleWide.hide.itemTitle
                                             p= item.title
                                     .dueDate
                                         if (item.overDue)
@@ -140,26 +140,26 @@ body
                                             p= 'Date Completed: ' + item.dateCompletedFormatted
                                         else
                                             p= 'Not Completed'
-                                    button.editItem1.neutralBtn(onClick=`loadEditForm('editForm:${item._id}', 'editBtn:${item._id}')` id=`editBtn:${item._id}`) Edit
+                                    button.editItem1.neutralBtn(onClick=`loadForm('editForm:${item._id}', 'editBtn:${item._id}', 'Edit')` id=`editBtn:${item._id}`) Edit
                                     form(method='post' action=item.url + '/update' id=`editForm:${item._id}`).editItemForm1.hide
                                         label(for='title') Title
                                         input#title(type='text' name='title' value=item.title)
                                         label(for='description') Description
                                         textarea(name='description' id='description')= item.description
                                         label(for='dueDate') Due Date
-                                        input(type="date" id='dueDate' name="dueDate" value=item.dueDateStandard)
-                                        input(type="submit" value="Edit").posBtn.pointer
+                                        input(type='date' id='dueDate' name='dueDate' value=item.dueDateStandard)
+                                        input(type='submit' value='Edit').posBtn.pointer
                                     form(method='post' action=item.url + '/delete')
-                                        input(type="submit" value="Delete").delBtn.pointer
+                                        input(type='submit' value='Delete').delBtn.pointer
                         li.createItemSection
-                            button#itemCreateBtn.neutralBtn(onClick='loadCreateItemForm()') Create New Item
-                            form(method='post' action='/dashboard/projects/' + selected_project).createItemForm.hide
+                            button#itemCreateBtn.neutralBtn(onClick=`loadForm('createItemForm', 'itemCreateBtn', 'Create New Item')`) Create New Item
+                            form(method='post' action='/dashboard/projects/' + selected_project)#createItemForm.hide
                                 label(for='completeCheckbox') Mark Completed
                                 input(type='checkbox' name='completed' id='completeCheckbox' value='true')
                                 input(type='text' name='title' placeholder='Title' required='true')
-                                textarea(placeholder="Description" name="description")
-                                input(type="date" name="dueDate")
-                                input(type="submit" value="Create").posBtn.pointer
+                                textarea(placeholder='Description' name='description')
+                                input(type='date' name='dueDate')
+                                input(type='submit' value='Create').posBtn.pointer
             div.details
                 if (typeof(selected_item) !== 'undefined')
                     .details-content
@@ -174,67 +174,39 @@ body
                         else
                             p= 'Not Completed'
 
-                    button#editItem2.neutralBtn(onClick="loadEditForm('editItemForm2', 'editItem2')") Edit
+                    button#editItem2.neutralBtn(onClick=`loadForm('editItemForm2', 'editItem2', 'Edit')`) Edit
                     form(method='post' action=selected_item.url + '/update')#editItemForm2.hide
                         label(for='title') Title
                         input#title(type='text' name='title' value=selected_item.title)
                         label(for='description') Description
                         textarea(name='description' id='description')= selected_item.description
                         label(for='dueDate') Due Date
-                        input(type="date" id='dueDate' name="dueDate" value=selected_item.dueDateStandard)
-                        input(type="submit" value="Edit").posBtn.pointer
+                        input(type='date' id='dueDate' name='dueDate' value=selected_item.dueDateStandard)
+                        input(type='submit' value='Edit').posBtn.pointer
                     form(method='post' action=selected_item.url + '/delete')
-                        input(type="submit" value="Delete").delBtn.pointer
+                        input(type='submit' value='Delete').delBtn.pointer
 
 script.
 
-    var profileDrop = document.querySelector('.profileDropdown');
-
-    function loadEditForm(formId, btnId) {
+    function loadForm(formId, btnId, btnValue) {
         var form = document.getElementById(formId)
         form.classList.toggle('hide');
         var btn = document.getElementById(btnId);
         if(form.classList.contains('hide')) {
-            btn.innerText = 'Edit';
+            btn.innerText = btnValue;
         } else {
             btn.innerText = 'Cancel';
         }
     }
 
-    function loadCreateItemForm() {
-        const itemCreateForm = document.querySelector('.createItemForm');
-        const itemCreateBtn = document.getElementById('itemCreateBtn');
-        itemCreateForm.classList.toggle('hide');
-        if(itemCreateForm.classList.contains('hide')) {
-            itemCreateBtn.innerText = 'Create New Item';
-        } else {
-            itemCreateBtn.innerText = 'Cancel';
-        }
+    function loadDropdown(id) {
+        var dropdown = document.getElementById(id);
+        dropdown.classList.remove('hide')
     }
 
-    function loadCreateProjectForm() {
-        const projCreateBtn = document.getElementById('createProj');
-        const projCreateForm = document.querySelector('.createProjForm');
-
-        projCreateForm.classList.toggle('hide');
-        if(projCreateForm.classList.contains('hide')) {
-            projCreateBtn.innerText = 'Create New Project';
-        } else {
-            projCreateBtn.innerText = 'Cancel';
-        }
-    }
-
-    function loadDropdown() {
-        profileDrop.classList.remove('hide')
-    }
-
-    function removeDropdown() {
-        profileDrop.classList.add('hide')
-    }
-
-    function toggleOptions(id) {
-        const projDelForm = document.getElementById(id)
-        projDelForm.classList.toggle('hide')
+    function removeDropdown(id) {
+        var dropdown = document.getElementById(id);
+        dropdown.classList.add('hide')
     }
 
     function changeDetailsLoc() {
