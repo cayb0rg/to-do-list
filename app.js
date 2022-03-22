@@ -40,8 +40,8 @@ app.use(passport.session());
 app.use(flash());
 
 // MongoDB Set-Up
-var mongoDB = 'mongodb+srv://omenitep:djbYYQmTdvWsIeWG@cluster0.yvgfo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true });
+const uri = process.env.MONGODB_URI;
+mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true });
 //mongoose.connect('mongodb://localhost/ToDoListAPI', {useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
@@ -64,4 +64,4 @@ app.use('/', authRoutes);
 const port = process.env.PORT || 3000;
 
 app.listen(port);
-console.log("App is now listening on port `${port}`");
+console.log(`App is now listening on port ${port}`);
