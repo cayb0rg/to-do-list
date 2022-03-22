@@ -40,9 +40,9 @@ app.use(passport.session());
 app.use(flash());
 
 // MongoDB Set-Up
-//var mongoDB = 'mongodb+srv://omenitep:djbYYQmTdvWsIeWG@cluster0.erx2u.mongodb.net/Cluster0?retryWrites=true&w=majority';
-//mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect('mongodb://localhost/ToDoListAPI', {useNewUrlParser: true, useUnifiedTopology: true });
+var mongoDB = 'mongodb+srv://omenitep:djbYYQmTdvWsIeWG@cluster0.yvgfo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect('mongodb://localhost/ToDoListAPI', {useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error'));
