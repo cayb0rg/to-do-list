@@ -14,7 +14,7 @@ mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true });
 ```
 Uncomment the line
 ```
-mongoose.connect('mongodb://localhost/ToDoListAPI', {useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost/[database_name_here]', {useNewUrlParser: true, useUnifiedTopology: true });
 ```
 
 2. Clone this git repository:
