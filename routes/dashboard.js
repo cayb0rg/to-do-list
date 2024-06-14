@@ -18,17 +18,17 @@ router.post('/projects', project_controller.project_create, project_controller.i
 // Update project details
 router.post('/projects/:projectId/update', project_controller.project_update, (req, res) => {
     res.redirect('/dashboard/projects/')
-}); 
+});
 
 // Delete project
 router.post('/projects/:projectId/delete', project_controller.project_delete, (req, res) => {
     res.redirect('/dashboard/projects/')
-}); 
+});
 
 // Item routes
 
 // List items in project
-router.get('/projects/:projectId', item_controller.index) 
+router.get('/projects/:projectId', item_controller.index)
 
 // Create new item in project
 router.post('/projects/:projectId', item_controller.item_create, item_controller.index);
@@ -44,7 +44,7 @@ router.post('/projects/:projectId/:toDoItemId/update', item_controller.item_upda
 // Delete single to-do item
 router.post('/projects/:projectId/:toDoItemId/delete', item_controller.item_delete, (req, res) => {
     res.redirect('/dashboard/projects/' + req.params.projectId)
-}); 
+});
 
 
 

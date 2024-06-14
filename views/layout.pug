@@ -12,7 +12,7 @@ body
         div.sidebar-nav
             ul
                 li
-                    a(href='/dashboard/projects') 
+                    a(href='/dashboard/projects')
                         strong All Projects
                 if (typeof(projects) !== 'undefined')
                     each project in projects
@@ -37,7 +37,7 @@ body
                                     polygon(points='0 10, 5 0, 10 10')
                     span Number of Items
                     span Date Created
-                    span 
+                    span
                 div.project-list
                     ul
                         each project in projects
@@ -55,12 +55,12 @@ body
                                         ellipse(cx='6' cy='2' rx='0.5' ry='0.5')
                                     form.projDel(action=project.url + '/delete' method='post' id=project._id onmouseover=`loadDropdown('${project._id}')` onmouseout=`removeDropdown('${project._id}')`).hide
                                         input.delBtn.pointer(type='submit' value='Delete')
-                            
+
             div.details
         if (layout == 'todoitems')
             .table
                 div.item-header
-                    div 
+                    div
                         p Complete
                         .sortingArrows
                             a(href='/dashboard/projects/' + selected_project + `?sortBy=completed&orderBy=desc`).sortBy
@@ -86,7 +86,7 @@ body
                                     polygon(points='0 0, 5 10, 10 0')
                             a(href='/dashboard/projects/' + selected_project + `?sortBy=dueDate&orderBy=asc`).sortBy
                                 svg(height='10px' width='10px')
-                                    polygon(points='0 10, 5 0, 10 10') 
+                                    polygon(points='0 10, 5 0, 10 10')
                     div
                         p Created
                         .sortingArrows
@@ -101,7 +101,7 @@ body
                         if (typeof(toDoItems) !== 'undefined')
                             each item in toDoItems
                                 li
-                                    if (item.completed) 
+                                    if (item.completed)
                                         .checkbox
                                             form(method='post' action=item.url + '/update')
                                                 input(type='hidden' name='completed' value='false')#incompleteCheckbox
@@ -211,7 +211,7 @@ script.
 
     function changeDetailsLoc() {
         if (document.querySelector('body').clientWidth <= 1000) {
-            
+
             document.querySelectorAll('.titleSmall').forEach((container) => {
                 container.classList.remove('hide');
             })
@@ -233,6 +233,6 @@ script.
     }
 
     changeDetailsLoc() // Check window width every time page is loaded
-    
+
     window.onbeforeunload = changeDetailsLoc;
     window.onresize= changeDetailsLoc;

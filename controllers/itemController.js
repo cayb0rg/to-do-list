@@ -4,107 +4,102 @@ const async = require('async');
 var projectController = require('./projectController')
 
 // Display to do items in list, display projects in nav
-exports.index = function(req, res) {
-    async.parallel({
-        projects: function(callback) {
-            Project.find({user: req.user.id}, callback)
-        },
-        items: function(callback) {
-            // Sort
-            const sort = {}
-            if (req.query.sortBy && req.query.orderBy) {
-                sort[req.query.sortBy] = req.query.orderBy === 'desc' ? -1 : 1;
-            }
-            ToDoItem.find({project: req.params.projectId}, callback).sort(sort).populate('project');
-        },
-        selected_project: function(callback) {
-            callback(null, req.params.projectId);
-        }
-    }, function(err, results) {
+exports.index = async function(req, res) {
+    try {
+        const [projects, items] = await Promise.all([
+            Project.find({ user: req.user.id }).lean(),
+            ToDoItem.find({ project: req.params.projectId })
+                    .sort(req.query.sortBy ? { [req.query.sortBy]: req.query.orderBy === 'desc' ? -1 : 1 } : {})
+                    .populate('project')
+        ]);
+
         res.render('layout', {
             loggedIn: true,
-            layout: 'todoitems', 
-            projects: results.projects, 
-            toDoItems: results.items,
-            selected_project: results.selected_project
-        })
-    })    
+            layout: 'todoitems',
+            projects: projects,
+            toDoItems: items,
+            selected_project: req.params.projectId
+        });
+    } catch (err) {
+        res.send(err);
+    }
 }
 
 // Display item in details panel, display to do items in list, display projects in nav
-exports.item_get = function(req, res) {
-    async.parallel({
-        projects: function(callback) {
-            Project.find({user: req.user.id}, callback)
-        },
-        items: function(callback) {
-            ToDoItem.find({project: req.params.projectId}, callback).populate('project');
-        },
-        selected_item: function(callback) {
-            ToDoItem.findById(req.params.toDoItemId, callback).populate('project');
-        },
-        selected_project: function(callback) {
-            callback(null, req.params.projectId);
-        }
-    }, function(err, results) {
+exports.item_get = async function(req, res) {
+    try {
+        const [projects, items, selectedItem] = await Promise.all([
+            Project.find({ user: req.user.id }).lean(),
+            ToDoItem.find({ project: req.params.projectId }).populate('project'),
+            ToDoItem.findById(req.params.toDoItemId).populate('project')
+        ]);
+
         res.render('layout', {
             loggedIn: true,
-            layout: 'todoitems', 
-            projects: results.projects, 
-            toDoItems: results.items,
-            selected_item: results.selected_item,
-            selected_project: results.selected_project})
-    })
+            layout: 'todoitems',
+            projects: projects,
+            toDoItems: items,
+            selected_item: selectedItem,
+            selected_project: req.params.projectId
+        });
+    } catch (err) {
+        res.send(err);
+    }
 }
 
 // Handle item create
 exports.item_create = async function(req, res, next) {
-    var completionDate;
-    if (req.body.completed)
-        completionDate = new Date();
-    else
-        completionDate = null;
-    
-    let item = new ToDoItem({
-        title: req.body.title,
-        description: req.body.description,
-        dueDate: req.body.dueDate,
-        priority: req.body.priority,
-        dateCreated: new Date(),
-        completed: req.body.completed,
-        dateCompleted: completionDate,
-        project: req.params.projectId
-    })
-    Project.findById(item.project, (err, project) => {
+    try {
+        let completionDate = req.body.completed ? new Date() : null;
+
+        const item = new ToDoItem({
+            title: req.body.title,
+            description: req.body.description,
+            dueDate: req.body.dueDate,
+            priority: req.body.priority,
+            dateCreated: new Date(),
+            completed: req.body.completed,
+            dateCompleted: completionDate,
+            project: req.params.projectId
+        });
+
+        const project = await Project.findById(item.project);
         project.toDoItems.push(item);
-        project.save();
-    })
-    await item.save(function(err, item) {
-        if (err) return res.send(err);
-    })
-    res.status(201);
-    next();
+
+        await Promise.all([item.save(), project.save()]);
+
+        res.status(201);
+        next();
+    } catch (err) {
+        res.send(err);
+    }
 }
 
 // Patch item
-exports.item_update = function(req, res, next) {
-    ToDoItem.findById(req.params.toDoItemId, (err, item) => {
-        if (err) return res.send(err);
+exports.item_update = async function(req, res, next) {
+    try {
+        let updateFields = { ...req.body };
         if (req.body.completed)
-            req.body.dateCompleted = new Date();
-        item.set(req.body);
-        item.save((err) => {
-            if (err) return res.send(err);
-            res.status(201);
-            next();
-        })
-    });
+            updateFields.dateCompleted = new Date();
+
+        await ToDoItem.findByIdAndUpdate(req.params.toDoItemId, updateFields);
+
+        res.status(201);
+        next();
+    } catch (err) {
+        res.send(err);
+    }
 }
 
 // Delete item
-exports.item_delete = function(req, res, next) {
-    ToDoItem.deleteOne({_id: req.params.toDoItemId}, function(err) {
-        if (err) return res.send(err);
-    })
-    next();
+exports.item_delete = async function(req, res, next) {
+    try {
+        await ToDoItem.deleteOne({_id: req.params.toDoItemId}).catch(err => {
+            if (err) return res.send(err);
+        })
+        next();
+    }
+    catch(err) {
+        res.send(err);
+    }
 }

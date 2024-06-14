@@ -1,0 +1,48 @@
+version: 3.8
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/usr/src/app
+    hostname: todolist
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://mongo:27017/todolist
+    depends_on:
+      - mongo
+    # networks:
+    #   - todo-network
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - data:/data/db
+    ports:
+      - "27017:27017"
+    # networks:
+    #   - todo-network
+    command: mongod --port 27017 --bind_ip_all
+
+  # nginx:
+  #   container_name: nginx
+  #   image: nginx
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf
+  #   depends_on:
+  #     - app
+  #   networks:
+  #     - todo-network
+
+# networks:
+#   todo-network:
+
+volumes:
+  data:

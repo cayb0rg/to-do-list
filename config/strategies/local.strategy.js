@@ -1,19 +1,24 @@
-const LocalStrategy = require('passport-local').Strategy;
-const User = require('../../models/User');
+import { Strategy as LocalStrategy } from 'passport-local';
+import { findOne } from '../../models/User';
 
-module.exports = function localStrategy() {
+// passport local stategy is what passport uses to authenticate a user
+export default function localStrategy() {
     passport.use(new LocalStrategy(
-        function(username, password, done) {
-            User.findOne({ username: username }, function (err, user) {
+        async function(username, password, done) {
+            // find the user in the database
+            const user = await findOne({ username: username }).catch(err => {
                 if (err) { return done(err); }
-                if (!user) {
-                    return done(null, false, { message: 'Incorrect username.' });
-                }
-                if (!user.validPassword(password)) {
-                    return done(null, false, { message: 'Incorrect password.' });
-                }
-                return done(null, user);
+
             });
+            // if the user is not found
+            if (!user) {
+                return done(null, false, { message: 'Incorrect username.' });
+            }
+            // if the password is incorrect
+            if (!user.validPassword(password)) {
+                return done(null, false, { message: 'Incorrect password.' });
+            }
+            return done(null, user);
         }
     ))
 }

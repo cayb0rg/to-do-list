@@ -4,32 +4,38 @@ const bcrypt = require('bcrypt');
 
 // User Authentication Set-Up
 
-module.exports = function(passport) {
+module.exports = async function(passport) {
     passport.use(new LocalStrategy({
         username: 'username',
         password: 'password'
-    }, function(username, password, done) {
-        User.findOne({ username: username }, function (err, user) {
+    }, async function(username, password, done) {
+        const user = await User.findOne({ username: username }).catch(err => {
             if (err) { return done(err); }
-            if (!user) {
-                return done(null, false, { message: 'Incorrect username and/or password.' });
-            }
-            // Match password
-            bcrypt.compare(password, user.password, (err, isMatch) => {
-                if (err) throw err;
-                if (!isMatch) return done(null, false, {message: 'Incorrect username and/or password'});
-                else return done(null, user);
-            });
+        });
+
+        if (!user) {
+            return done(null, false, { message: 'Incorrect username and/or password.' });
+        }
+        // Match password
+        bcrypt.compare(password, user.password, (err, isMatch) => {
+            if (err) throw err;
+            if (!isMatch) return done(null, false, {message: 'Incorrect username and/or password'});
+            else return done(null, user);
         });
     }
     ))
+
+    // user.id is saved in the session and used later to deserialize the user
     passport.serializeUser(function(user, done) {
         done(null, user.id);
     });
-    
-    passport.deserializeUser(function(id, done) {
-        User.findById(id, function(err, user) {
-            done(err, user);
+
+    // returns the user object based on the id
+    passport.deserializeUser(async function(id, done) {
+        const user = await User.findById(id).catch(err => {
+            return done(err, null);
         });
+
+        return done(null, user);
     });
 }

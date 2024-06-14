@@ -3,68 +3,59 @@ var ToDoItem = require('../models/ToDoItem')
 var async = require('async')
 
 // List projects
-exports.index = function(req, res) {
+exports.index = async function(req, res) {
     // Sort
-    const sort = {}
+    const sort = {};
     if (req.query.sortBy && req.query.orderBy) {
         sort[req.query.sortBy] = req.query.orderBy === 'desc' ? -1 : 1;
     }
-    
-    Project.find({user: req.user.id}, function(err, projects) {
+
+    try {
+        const projects = await Project.find({ user: req.user.id }).sort(sort).populate('toDoItems');
+
         res.render('layout', {
             loggedIn: true,
-            projects: projects, 
+            projects: projects,
             layout: 'projects'
-        })
-    }).sort(sort).populate('toDoItems')
+        });
+    } catch (err) {
+        res.send(err);
+    }
 }
 
 // Handle project create
 exports.project_create = async function(req, res, next) {
-    let project = new Project({
+    const project = new Project({
         name: req.body.name,
         user: req.user.id,
         dateCreated: new Date(),
-    })
+    });
 
-    await project.save((err) => {
-        if (err) return res.send(err);
-    })
-
-    next();
+    try {
+        await project.save();
+        next();
+    } catch (err) {
+        res.send(err);
+    }
 }
 
 // Handle project update
-exports.project_update = function(req, res) {
-    Project.findById(req.params.projectId, (err, project) => {
-        if (err) return res.send(err);
-        project.set(req.body);
-        project.save((err) => {
-            if (err) return res.send(err);
-            res.status(201);
-            next();
-        })
-    });
+exports.project_update = async function(req, res) {
+    try {
+        const updatedProject = await Project.findByIdAndUpdate(req.params.projectId, req.body, { new: true });
+        res.status(201).send(updatedProject);
+    } catch (err) {
+        res.send(err);
+    }
 }
 
 // Delete project
 exports.project_delete = async function(req, res, next) {
-    async.parallel([
-        function(callback) {
-            Project.deleteOne({_id: req.params.projectId}, (err) => {
-                if (err) return res.send(err);
-                callback();
-            })
-        },
-        function(callback) {
-            ToDoItem.deleteMany({project: req.params.projectId}, (err) => {
-                if (err) return res.send(err);
-                callback();
-            })
-        },
-    ], function(err) {
+    try {
+        await Project.deleteOne({ _id: req.params.projectId });
+        await ToDoItem.deleteMany({ project: req.params.projectId });
         next();
-    })
-    
-
+    } catch (err) {
+        res.send(err);
+    }
 }

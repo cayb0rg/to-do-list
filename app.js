@@ -8,6 +8,11 @@ const passport = require('passport');
 const flash = require('connect-flash-plus');
 const mongoose = require('mongoose').set('debug', true);
 
+// Routes
+const dashboardRoutes = require('./routes/dashboard.js');
+const authRoutes = require('./routes/authRoutes.js');
+const { ensureAuthenticated } = require('./config/auth');
+
 const app = express();
 
 // Passport config
@@ -40,25 +45,19 @@ app.use(passport.session());
 app.use(flash());
 
 // MongoDB Set-Up
-const uri = process.env.MONGODB_URI;
-mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true });
-//mongoose.connect('mongodb://localhost/ToDoListAPI', {useNewUrlParser: true, useUnifiedTopology: true });
+console.log(`Connecting to mongodb....`);
+// const uri = process.env.MONGODB_URI;
+// mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGO_URI || 'mongodb://mongo:27017/todolist', {useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
+
+console.log(`Connected to mongodb!`);
+
 db.on('error', console.error.bind(console, 'MongoDB connection error'));
 
-// Routes
-const dashboard = require('./routes/dashboard.js');
-const authRoutes = require('./routes/authRoutes.js');
-const { ensureAuthenticated } = require('./config/auth');
-
-app.get('/', (req, res) => {
-    if (req.isAuthenticated())
-        res.render('homepage', {loggedIn: true});
-    else
-        res.render('homepage', {loggedIn: false});
-});
-app.use('/dashboard', ensureAuthenticated, dashboard);
+// ROUTES
+app.use('/dashboard', ensureAuthenticated, dashboardRoutes);
 app.use('/', authRoutes);
 
 const port = process.env.PORT || 3000;
