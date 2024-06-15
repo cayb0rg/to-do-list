@@ -7,7 +7,7 @@ My original goal for this project was to learn the MVC architecture and SSR. As 
 
 While it may say "A place to plan your next best trip", do not be fooled. This is only a to do list:
 
-![image](https://github.com/cayb0rg/to-do-list/assets/46247315/635ed316-2d7d-4088-ae77-145643b36fcd)
+![image](https://github.com/cayb0rg/to-do-list/assets/46247315/16126d0e-424b-4bc3-9e19-ceb257ec5f65)
 
 # Deployment
 
