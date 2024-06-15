@@ -1,7 +1,6 @@
 const ToDoItem = require('../models/ToDoItem')
 const Project = require('../models/Project')
 const async = require('async');
-var projectController = require('./projectController')
 
 // Display to do items in list, display projects in nav
 exports.index = async function(req, res) {
