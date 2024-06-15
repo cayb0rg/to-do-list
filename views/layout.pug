@@ -16,8 +16,12 @@ body
                         strong All Projects
                 if (typeof(projects) !== 'undefined')
                     each project in projects
-                        li
-                            a(href=project.url)= project.name
+                        if (project._id == selected_project)
+                            li.selected
+                                a(href=project.url)= project.name
+                        else
+                            li
+                                a(href=project.url)= project.name
             button#createProjBtn.neutralBtn(onClick=`loadForm('createProjForm', 'createProjBtn', 'Create New Project')`) Create New Project
             #createProjForm.hide
                 form(method='post' action='/dashboard/projects')
@@ -59,6 +63,7 @@ body
             div.details
         if (layout == 'todoitems')
             .table
+                h2=selected_project_name
                 div.item-header
                     div
                         p Complete

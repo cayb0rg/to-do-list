@@ -39,9 +39,16 @@ router.post('/signup', async (req, res) => {
         errors.push({msg: 'Password should be at least 6 characters'});
     }
 
+    // If username contains any non-alphanumeric characters (except for _)
+    if (username.match(/\W/g)) {
+        errors.push({msg: 'Username should not contain special characters'});
+    }
+
     if (errors.length > 0) {
         return res.render('sign-up', {errors, username, password, password2});
-    } else {
+    }
+
+    else {
         // Validation passed
         try {
             await User.findOne({username: username}).then(user => {

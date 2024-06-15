@@ -1,7 +1,7 @@
 :root {
     --primary-color:  #000839;
     --secondary-color: #005082;
-    --third-color: #00a8cc;
+    --third-color: #0062a0;
     --pop-color: #ffa41b;
     --neutral-color: white;
     --font: "Poppins";
@@ -205,6 +205,10 @@ form input, form textarea {
 
 .sidebar-nav li:not(:last-child) {
     border-bottom: 1px solid var(--third-color);
+}
+
+li.selected {
+    background-color: var(--third-color);
 }
 
 /* Table */
