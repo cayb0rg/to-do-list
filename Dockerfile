@@ -7,12 +7,12 @@ WORKDIR /usr/src/app
 FROM base AS install
 RUN mkdir -p /temp/dev
 COPY package.json bun.lockb /temp/dev/
-RUN cd /temp/dev && bun install
+RUN cd /temp/dev && bun install --frozen-lockfile
 
 # install with --production (exclude devDependencies)
 RUN mkdir -p /temp/prod
 COPY package.json bun.lockb /temp/prod/
-RUN cd /temp/prod && bun install --production
+RUN cd /temp/prod && bun install --frozen-lockfile --production
 
 # copy node_modules from temp directory to the container
 FROM base AS prerelease
@@ -38,18 +38,3 @@ USER bun
 EXPOSE 3000/tcp
 # Wait for Mongodb to start
 ENTRYPOINT [ "./wait-for-it.sh", "mongo", "--", "bun", "start" ]
-
-# FROM oven/bun:1 as base
-# WORKDIR /usr/src/app
-
-# COPY . .
-
-# RUN bun install
-
-# # Install netcat for wait-for-it.sh script
-# RUN apt-get update && apt-get install -y netcat
-
-# USER bun
-# EXPOSE 3000/tcp
-# # Wait for Mongodb to start
-# ENTRYPOINT [ "./wait-for-it.sh", "mongo", "--", "bun", "start" ]

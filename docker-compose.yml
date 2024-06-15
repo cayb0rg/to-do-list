@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   app:
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile
@@ -20,6 +21,7 @@ services:
 
   mongo:
     container_name: mongo
+    restart: always
     image: mongo
     volumes:
       - data:/data/db
