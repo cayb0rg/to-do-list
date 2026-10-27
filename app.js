@@ -48,8 +48,7 @@ app.use(flash());
 console.log(`Connecting to mongodb....`);
 // const uri = process.env.MONGODB_URI;
 // mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect(process.env.MONGO_URI || 'mongodb://mongo:27017/todolist', {useNewUrlParser: true, useUnifiedTopology: true });
-
+mongoose.connect(process.env.MONGO_URI || 'mongodb://mongo:27017/todolist');
 const db = mongoose.connection;
 
 console.log(`Connected to mongodb!`);
